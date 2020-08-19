@@ -130,7 +130,7 @@ mod test {
 
     #[test]
     fn should_parse_indexed_type() -> Result<(), ParseError> {
-        let i = "simple<alpha, beta> ".char_indices().collect::<Vec<(usize, char)>>();
+        let i = "simple<alpha, beta>".char_indices().collect::<Vec<(usize, char)>>();
         let mut input = Input::new(&i);
         let u = parse_type(&mut input)?;
         let (name, types) = match u {
@@ -158,7 +158,7 @@ mod test {
 
     #[test]
     fn should_parse_namespace_type() -> Result<(), ParseError> {
-        let i = "mod1::mod2::Trait::Type ".char_indices().collect::<Vec<(usize, char)>>();
+        let i = "mod1::mod2::Trait::Type".char_indices().collect::<Vec<(usize, char)>>();
         let mut input = Input::new(&i);
         let u = parse_type(&mut input)?;
         let (names, t) = match u {
@@ -183,7 +183,7 @@ mod test {
 
     #[test]
     fn should_parse_unit_type() -> Result<(), ParseError> {
-        let i = "() ".char_indices().collect::<Vec<(usize, char)>>();
+        let i = "()".char_indices().collect::<Vec<(usize, char)>>();
         let mut input = Input::new(&i);
         let u = parse_type(&mut input)?;
 
@@ -195,7 +195,7 @@ mod test {
 
     #[test]
     fn should_parse_tuple_type() -> Result<(), ParseError> {
-        let i = "(alpha, beta, gamma) ".char_indices().collect::<Vec<(usize, char)>>();
+        let i = "(alpha, beta, gamma)".char_indices().collect::<Vec<(usize, char)>>();
         let mut input = Input::new(&i);
         let u = parse_type(&mut input)?;
 
@@ -217,7 +217,7 @@ mod test {
 
     #[test]
     fn should_parse_arrow_type() -> Result<(), ParseError> {
-        let i = "fun(alpha) -> beta ".char_indices().collect::<Vec<(usize, char)>>();
+        let i = "fun(alpha) -> beta".char_indices().collect::<Vec<(usize, char)>>();
         let mut input = Input::new(&i);
         let u = parse_type(&mut input)?;
 
@@ -246,7 +246,7 @@ mod test {
 
     #[test]
     fn should_parse_paren_type() -> Result<(), ParseError> {
-        let i = "(((alpha))) ".char_indices().collect::<Vec<(usize, char)>>();
+        let i = "(((alpha)))".char_indices().collect::<Vec<(usize, char)>>();
         let mut input = Input::new(&i);
         let u = parse_type(&mut input)?;
 
@@ -261,7 +261,7 @@ mod test {
 
     #[test]
     fn should_parse_arrow_past_arrow_parameter() -> Result<(), ParseError> {
-        let i = "fun(a) -> fun(fun(b) -> c) -> d ".char_indices().collect::<Vec<(usize, char)>>();
+        let i = "fun(a) -> fun(fun(b) -> c) -> d".char_indices().collect::<Vec<(usize, char)>>();
         let mut input = Input::new(&i);
         let u = parse_type(&mut input)?;
 
@@ -320,7 +320,7 @@ mod test {
 
     #[test]
     fn should_parse_paren_arrows() -> Result<(), ParseError> {
-        let i = "fun(a) -> fun(b) -> fun(fun(c) -> d) -> fun( fun( fun(e) -> f ) -> g ) -> i ".char_indices().collect::<Vec<(usize, char)>>();
+        let i = "fun(a) -> fun(b) -> fun(fun(c) -> d) -> fun( fun( fun(e) -> f ) -> g ) -> i".char_indices().collect::<Vec<(usize, char)>>();
         let mut input = Input::new(&i);
         let u = parse_type(&mut input)?;
 
@@ -434,7 +434,7 @@ mod test {
 
     #[test]
     fn should_parse_complex_tuple() -> Result<(), ParseError> {
-        let i = "(fun(a) -> b, c::d::e, (), i<j,k,l>, (m, n)) ".char_indices().collect::<Vec<(usize, char)>>();
+        let i = "(fun(a) -> b, c::d::e, (), i<j,k,l>, (m, n))".char_indices().collect::<Vec<(usize, char)>>();
         let mut input = Input::new(&i);
         let u = parse_type(&mut input)?;
 
@@ -559,7 +559,7 @@ mod test {
 
     #[test]
     fn should_parse_index_namespace() -> Result<(), ParseError> {
-        let i = "a::e<f> ".char_indices().collect::<Vec<(usize, char)>>();
+        let i = "a::e<f>".char_indices().collect::<Vec<(usize, char)>>();
         let mut input = Input::new(&i);
         let u = parse_type(&mut input)?;
         
@@ -642,7 +642,7 @@ mod test {
 
     #[test]
     fn should_parse_namespace_arrow_param() -> Result<(), ParseError> {
-        let i = "fun(a::b) -> c::d ".char_indices().collect::<Vec<(usize, char)>>();
+        let i = "fun(a::b) -> c::d".char_indices().collect::<Vec<(usize, char)>>();
         let mut input = Input::new(&i);
         let u = parse_type(&mut input)?;
 

@@ -72,6 +72,18 @@ fn parse_index_type(input : &mut Input, init : PSym) -> Result<Type, ParseError>
     Ok(Type::Index( init, indices ))
 }
 
+fn parse_row_type(input : &mut Input) -> Result<Type, ParseError> {
+    input.expect("{")?;
+    let row = input.list( |i| {
+        let slot = i.parse_symbol()?;
+        i.expect(":")?;
+        let slot_type = parse_type(i)?;
+        Ok(RowItem { slot, slot_type })
+    })?;
+    input.expect("}")?;
+    Ok(Type::Row(row))
+}
+
 pub fn parse_type(input : &mut Input) -> Result<Type, ParseError> {
 
     match parse_tuple_type(input) {

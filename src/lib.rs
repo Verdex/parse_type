@@ -44,9 +44,9 @@ fn parse_fun_type(parse_input: &mut Input) -> Result<Type, ParseError> {
     let input = parse_input.list(parse_type)?;
     parse_input.expect(")")?;
     parse_input.expect("->")?;
-    let output = parse_type(parse_input)?;
+    let output = Box::new(parse_type(parse_input)?);
 
-    Ok(Type::Fun { input, output: Box::new(output) })
+    Ok(Type::Fun { input, output })
 }
 
 fn parse_namespace_type(input : &mut Input, init : PSym) -> Result<(Vec<PSym>, PSym), ParseError> {

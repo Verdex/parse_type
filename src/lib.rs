@@ -85,36 +85,34 @@ fn parse_row_type(input : &mut Input) -> Result<Type, ParseError> {
 }
 
 pub fn parse_type(input : &mut Input) -> Result<Type, ParseError> {
+    
+    fn parse_other(input : &mut Input) -> Result<Type, ParseError> {
+        let simple = input.parse_symbol()?;
 
-    match parse_tuple_type(input) {
-        Ok(t) => return Ok(t),
-        _ => (),
-    }
-
-    match parse_fun_type(input) {
-        Ok(t) => return Ok(t),
-        _ => (),
-    }
-
-    let simple = input.parse_symbol()?;
-
-    match input.expect("::") {
-        Ok(_) => {
-            let (namespace, symbol) = parse_namespace_type(input, simple)?;
-            match input.expect("<") {
-                Ok(_) => {
-                    let index_type = parse_index_type(input, symbol)?;
-                    Ok(Type::Namespace(namespace, Box::new(index_type)))
-                },
-                Err(_) => Ok(Type::Namespace(namespace, Box::new(Type::Simple(symbol)))),
-            }
-        },
-        Err(_) =>
-            match input.expect("<") {
-                Ok(_) => Ok(parse_index_type(input, simple)?),
-                Err(_) => Ok(Type::Simple(simple)),
+        match input.expect("::") {
+            Ok(_) => {
+                let (namespace, symbol) = parse_namespace_type(input, simple)?;
+                match input.expect("<") {
+                    Ok(_) => {
+                        let index_type = parse_index_type(input, symbol)?;
+                        Ok(Type::Namespace(namespace, Box::new(index_type)))
+                    },
+                    Err(_) => Ok(Type::Namespace(namespace, Box::new(Type::Simple(symbol)))),
+                }
             },
+            Err(_) =>
+                match input.expect("<") {
+                    Ok(_) => Ok(parse_index_type(input, simple)?),
+                    Err(_) => Ok(Type::Simple(simple)),
+                },
+        }
     }
+
+    input.choice( &[ parse_row_type
+                   , parse_tuple_type
+                   , parse_fun_type
+                   , parse_other
+                   ] )
 }
 
 #[cfg(test)]

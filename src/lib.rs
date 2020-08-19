@@ -3,6 +3,11 @@ extern crate parse_input;
 
 use parse_input::{Input, ParseError, PSym};
 
+#[derive(Debug)]
+pub struct RowItem {
+    pub slot : PSym,
+    pub slot_type : Type, 
+}
 
 #[derive(Debug)]
 pub enum Type {
@@ -10,10 +15,10 @@ pub enum Type {
     Simple(PSym),
     Index(PSym, Vec<Type>),
     Fun { input : Vec<Type>, output : Box<Type> },
-    Tuple(Vec<Type>), // TODO remove
+    Tuple(Vec<Type>), 
     Namespace(Vec<PSym>, Box<Type>),
+    Row(Vec<RowItem>),
     Infer,
-    // TODO row type
 }
 
 

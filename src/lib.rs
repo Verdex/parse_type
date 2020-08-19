@@ -716,5 +716,112 @@ mod test {
 
         Ok(())
     }
+
+    #[test]
+    fn should_parse_single_row_type() -> Result<(), ParseError> {
+        let i = "{ a : b }".char_indices().collect::<Vec<(usize, char)>>();
+        let mut input = Input::new(&i);
+        let u = parse_type(&mut input)?;
+
+        let mut items = match u {
+            Type::Row(i) => i,
+            x => panic!("should be row type, but found {:?}", x),
+        };
+
+        assert_eq!( items.len(), 1 );
+
+        let item = items.pop().unwrap();
+
+        assert_eq!( item.slot.value, "a" );
+
+        let type_name = match item.slot_type {
+            Type::Simple(n) => n,
+            x => panic!("should be simple type, but found {:?}", x),
+        };
+
+        assert_eq!( type_name.value, "b" );
+
+        Ok(())
+    }
+
+    #[test]
+    fn should_parse_double_row_type() -> Result<(), ParseError> {
+        let i = "{ a : b, c : d }".char_indices().collect::<Vec<(usize, char)>>();
+        let mut input = Input::new(&i);
+        let u = parse_type(&mut input)?;
+
+        let mut items = match u {
+            Type::Row(mut i) => {i.reverse(); i},
+            x => panic!("should be row type, but found {:?}", x),
+        };
+
+        assert_eq!( items.len(), 2 );
+
+        let item = items.pop().unwrap();
+
+        assert_eq!( item.slot.value, "a" );
+
+        let type_name = match item.slot_type {
+            Type::Simple(n) => n,
+            x => panic!("should be simple type, but found {:?}", x),
+        };
+
+        assert_eq!( type_name.value, "b" );
+
+        let item = items.pop().unwrap();
+
+        assert_eq!( item.slot.value, "c" );
+
+        let type_name = match item.slot_type {
+            Type::Simple(n) => n,
+            x => panic!("should be simple type, but found {:?}", x),
+        };
+
+        assert_eq!( type_name.value, "d" );
+
+        Ok(())
+    }
+
+    #[test]
+    fn should_parse_row_type_with_row_type() -> Result<(), ParseError> {
+        let i = "{ a : { b : c } }".char_indices().collect::<Vec<(usize, char)>>();
+        let mut input = Input::new(&i);
+        let u = parse_type(&mut input)?;
+
+        match u {
+            Type::Row(_) => (),
+            x => panic!("should be row type, but found {:?}", x),
+        }
+
+        Ok(())
+    }
+
+    #[test]
+    fn should_parse_row_type_with_other_types() -> Result<(), ParseError> {
+        let i = "{ a : { b : c }, b : fun(x) -> y, c : (), d : f<h>, e : j::k }".char_indices().collect::<Vec<(usize, char)>>();
+        let mut input = Input::new(&i);
+        let u = parse_type(&mut input)?;
+
+        match u {
+            Type::Row(_) => (),
+            x => panic!("should be row type, but found {:?}", x),
+        }
+
+        Ok(())
+    }
+
+    #[test]
+    fn should_parse_row_type_in_other_types() -> Result<(), ParseError> {
+        let i = "({a : b}, fun({c : d}, {e : f}) -> {g : h}, i<{j:k}>)".char_indices().collect::<Vec<(usize, char)>>();
+        let mut input = Input::new(&i);
+        let u = parse_type(&mut input)?;
+
+        match u {
+            Type::Tuple(_) => (),
+            x => panic!("should be tuple type, but found {:?}", x),
+        }
+
+        Ok(())
+    }
 }
 
